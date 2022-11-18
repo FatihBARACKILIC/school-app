@@ -374,3 +374,5 @@ class HomeScreen extends StatelessWidget {
     print("height: $height");
   }
 }
+
+// responseive home screen

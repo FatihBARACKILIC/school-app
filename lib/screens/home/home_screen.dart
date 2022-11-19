@@ -147,9 +147,9 @@ class HomeScreen extends StatelessWidget {
               child: Text(
                 "School App",
                 style: TextStyle(
-                  fontSize:
-                      ((Theme.of(context).textTheme.headline1?.fontSize ?? 50) *
-                          1.25),
+                  fontSize: ((Theme.of(context).textTheme.headline1?.fontSize ??
+                          100) *
+                      .9),
                 ),
               ),
             ),
@@ -195,7 +195,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                           child: const Text(
                             "Login",
-                            textScaleFactor: 4,
+                            textScaleFactor: 3,
                           ),
                         ),
                       ),
@@ -230,7 +230,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                           child: const Text(
                             "SignUp",
-                            textScaleFactor: 4,
+                            textScaleFactor: 3,
                           ),
                         ),
                       ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class SignUpWidget extends StatefulWidget {
   const SignUpWidget({super.key});
@@ -24,15 +23,30 @@ class _SignUpWidgetState extends State<SignUpWidget> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const Text(
-              "Sign Up",
-              textScaleFactor: 5,
+            Container(
+              padding: EdgeInsets.symmetric(
+                vertical: MediaQuery.of(context).size.width * .15,
+              ),
+              width: MediaQuery.of(context).size.width * .5,
+              child: Image.asset(
+                "./assets/images/meb_logo.png",
+                color: Colors.white,
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top: 8),
+              child: Text(
+                "Sign Up",
+                textScaleFactor: 5,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: TextField(
                 controller: _controllerName,
+                textInputAction: TextInputAction.next,
                 decoration: const InputDecoration(
                   label: Text("User Name"),
                 ),
@@ -42,6 +56,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               padding: const EdgeInsets.only(top: 8),
               child: TextField(
                 keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
                 controller: _controllerEmail,
                 decoration: const InputDecoration(
                   label: Text("E-Mail"),
@@ -52,6 +67,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               padding: const EdgeInsets.only(top: 8),
               child: TextField(
                 controller: _controllerPassword,
+                onSubmitted: (String text) => _clickHandler(),
+                textInputAction: TextInputAction.go,
                 obscureText: true,
                 decoration: const InputDecoration(
                   label: Text("Password"),
@@ -76,5 +93,10 @@ class _SignUpWidgetState extends State<SignUpWidget> {
     );
   }
 
-  _clickHandler() {}
+  void _clickHandler() {
+    String userName = _controllerName.text.trim();
+    String userEmail = _controllerEmail.text.trim();
+    String userPassword = _controllerPassword.text.trim();
+    // TODO:
+  }
 }

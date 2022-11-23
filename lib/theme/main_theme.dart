@@ -7,6 +7,23 @@ ThemeData mainTheme() {
     // scaffoldBackgroundColor: const Color.fromRGBO(13, 17, 23, 1),
     scaffoldBackgroundColor: darkColor,
     brightness: Brightness.dark,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.deepPurple,
+    ),
+    inputDecorationTheme: const InputDecorationTheme(
+      floatingLabelStyle: TextStyle(
+        color: Colors.white,
+      ),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.white,
+        ),
+      ),
+    ),
+    elevatedButtonTheme: const ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: MaterialStatePropertyAll(Colors.deepPurple),
+      ),
+    ),
   );
 }
-// rgb(22,27,34)

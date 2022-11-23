@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:school_app/colors/colors.dart';
+import 'package:school_app/screens/sign_up/sign_up_screen.dart';
 import 'package:school_app/widgets/pill_button.dart';
 
 class HomeWidget extends StatefulWidget {
@@ -127,6 +127,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     );
   }
 
+  /// Unused Mode
   Widget _landscapeMode(double width, double height) {
     return SafeArea(
       child: Scaffold(
@@ -213,6 +214,11 @@ class _HomeWidgetState extends State<HomeWidget> {
   }
 
   void _signUpHandler() {
-    // TODO: Sign up screen
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SignUpScreen(),
+      ),
+    );
   }
 }

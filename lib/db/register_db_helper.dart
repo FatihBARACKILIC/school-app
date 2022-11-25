@@ -1,5 +1,4 @@
 import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:school_app/model/person.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -39,12 +38,69 @@ class RegisterDbHelper {
       """);
   }
 
+  Future<int> getUserId(String email, String password) async {
+    Database? db = await database;
+
+    List userData = await db!.query(
+      personTable,
+      columns: [
+        columnId,
+      ],
+      where: "$columnEMail=? and $columnPassword=?",
+      whereArgs: [email, password],
+    );
+
+    if (userData.isNotEmpty) {
+      return userData[0]["id"];
+    } else {
+      return 0;
+    }
+  }
+
+  Future getUserData(int id) async {
+    Database? db = await database;
+    List userData = await db!.query(
+      personTable,
+      columns: [
+        columnId,
+        columnUserName,
+        columnEMail,
+        columnPassword,
+      ],
+      where: "$columnId=?",
+      whereArgs: [id],
+    );
+    List user = [
+      userData[0]["id"]!,
+      userData[0]["userName"]!,
+      userData[0]["email"]!,
+      userData[0]["password"]!,
+    ];
+
+    return user;
+  }
+
   Future<int> insert(Person person) async {
     Database? db = await database;
+
+    if (await mailCheck(person.eMail.toString())) return 0;
 
     int result = await db!.insert(personTable, person.toMap());
 
     return result;
+  }
+
+  Future<bool> mailCheck(String email) async {
+    Database? db = await database;
+
+    List user = await db!.query(
+      personTable,
+      columns: [columnEMail],
+      where: "$columnEMail=?",
+      whereArgs: [email],
+    );
+
+    return user.isEmpty ? false : true;
   }
 
   Future<int> update(Person person) async {
@@ -68,6 +124,14 @@ class RegisterDbHelper {
       where: columnId,
       whereArgs: [id],
     );
+
+    return result;
+  }
+
+  Future<int> deleteAllDB() async {
+    Database? db = await database;
+
+    int result = await db!.delete(personTable);
 
     return result;
   }

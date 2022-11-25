@@ -1,10 +1,11 @@
-// ignore_for_file: avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 import 'package:school_app/colors/colors.dart';
+import 'package:school_app/helper/shared_preferences.dart';
+import 'package:school_app/screens/login/login_screen.dart';
 import 'package:school_app/screens/sign_up/sign_up_screen.dart';
+import 'package:school_app/screens/user_main/user_main_screen.dart';
 import 'package:school_app/widgets/pill_button.dart';
 
 class HomeWidget extends StatefulWidget {
@@ -18,7 +19,32 @@ class _HomeWidgetState extends State<HomeWidget> {
   @override
   void initState() {
     super.initState();
+    idCheck();
     setColor();
+  }
+
+  Future<int> getId() async =>
+      await SharedPreferencesHelper.getUserData("id") ?? 0;
+
+  idCheck() async {
+    var id = await getId();
+
+    print(id);
+
+    if (id != 0) {
+      userMainRoute();
+    }
+  }
+
+  userMainRoute() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const UserMainScreen(),
+        ),
+      );
+    });
   }
 
   Future<void> setColor() async {
@@ -118,7 +144,12 @@ class _HomeWidgetState extends State<HomeWidget> {
   }
 
   void _loginHandler() {
-    // TODO: login Screen
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const LoginScreen(),
+      ),
+    );
   }
 
   void _signUpHandler() {

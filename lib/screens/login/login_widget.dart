@@ -2,21 +2,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:school_app/db/register_db_helper.dart';
-import 'package:school_app/model/person.dart';
-import 'package:school_app/screens/login/login_screen.dart';
+import 'package:school_app/helper/shared_preferences.dart';
+import 'package:school_app/screens/sign_up/sign_up_screen.dart';
 import 'package:school_app/screens/user_main/user_main_screen.dart';
 
-class SignUpWidget extends StatefulWidget {
-  const SignUpWidget({super.key});
+class LoginWidget extends StatefulWidget {
+  const LoginWidget({super.key});
 
   @override
-  State<SignUpWidget> createState() => _SignUpWidgetState();
+  State<LoginWidget> createState() => _LoginWidgetState();
 }
 
-class _SignUpWidgetState extends State<SignUpWidget> {
-  final RegisterDbHelper _registerDbHelper = RegisterDbHelper();
-
-  final TextEditingController _controllerName = TextEditingController();
+class _LoginWidgetState extends State<LoginWidget> {
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
 
@@ -24,7 +21,6 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   void initState() {
     super.initState();
 
-    _controllerName.text = "Ali";
     _controllerEmail.text = "Ali@gmail.com";
     _controllerPassword.text = "Ali123456";
   }
@@ -33,7 +29,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Sign Up"),
+        title: const Text("Login"),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -56,23 +52,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
               const Padding(
                 padding: EdgeInsets.only(top: 8),
                 child: Text(
-                  "Sign Up",
+                  "Login",
                   textScaleFactor: 5,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(
-                  MediaQuery.of(context).size.width * .075,
-                  8,
-                  MediaQuery.of(context).size.width * .075,
-                  0,
-                ),
-                child: TextField(
-                  controller: _controllerName,
-                  textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    label: Text("User Name"),
-                  ),
                 ),
               ),
               Padding(
@@ -118,10 +99,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 child: SizedBox(
                   width: double.infinity,
                   height: 50,
-                  child: ElevatedButton.icon(
+                  child: ElevatedButton(
                     onPressed: _clickHandler,
-                    icon: const Icon(Icons.add),
-                    label: const Text("Register"),
+                    child: const Text("Login"),
                   ),
                 ),
               ),
@@ -139,36 +119,13 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
+                          builder: (context) => const SignUpScreen(),
                         )),
                     style: ButtonStyle(
                       backgroundColor:
                           MaterialStatePropertyAll(Colors.green.shade800),
                     ),
-                    child: const Text("Login"),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(
-                  MediaQuery.of(context).size.width * .075,
-                  8,
-                  MediaQuery.of(context).size.width * .075,
-                  0,
-                ),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      RegisterDbHelper registerDbHelper = RegisterDbHelper();
-                      print(registerDbHelper.deleteAllDB());
-                    },
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStatePropertyAll(Colors.red.shade800),
-                    ),
-                    child: const Text("Clear"),
+                    child: const Text("Sign Up"),
                   ),
                 ),
               ),
@@ -180,27 +137,21 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   }
 
   Future<void> _clickHandler() async {
-    String userName = _controllerName.text.trim();
     String userEmail = _controllerEmail.text.trim();
     String userPassword = _controllerPassword.text.trim();
 
-    if (userName.isEmpty || userEmail.isEmpty || userPassword.isEmpty) {
+    if (userEmail.isEmpty || userPassword.isEmpty) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(snackBar(waring: "Please fill in empty areas."));
-    } else if (userPassword.length < 8) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          snackBar(waring: "Password must be at least 8 characters."));
+          .showSnackBar(snackBar("Please fill in empty areas."));
     } else {
-      Person person = Person(userName, userEmail, userPassword);
-      int userId = await _registerDbHelper.insert(person);
-      if (userId == 0) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            snackBar(waring: "This email address is already registered!"));
-      } else {
+      RegisterDbHelper registerDbHelper = RegisterDbHelper();
+      int id = await registerDbHelper.getUserId(userEmail, userPassword);
+      if (id == 0) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(snackBar(waring: "Ok :d", color: Colors.green));
-        // SharedPreferencesHelper.saveUserData("id", userId);
-        // nextPage();
+            .showSnackBar(snackBar("Wrong e-mail or password!"));
+      } else {
+        SharedPreferencesHelper.saveUserData("id", id);
+        nextPage();
       }
     }
   }
@@ -214,7 +165,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
     );
   }
 
-  SnackBar snackBar({required waring, Color color = Colors.red}) {
+  SnackBar snackBar(waring) {
     return SnackBar(
       content: Text(
         waring,
@@ -223,7 +174,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
         ),
         textAlign: TextAlign.center,
       ),
-      backgroundColor: color,
+      backgroundColor: Colors.red,
       behavior: SnackBarBehavior.floating,
     );
   }

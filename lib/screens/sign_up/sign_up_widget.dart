@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:school_app/db/register_db_helper.dart';
+import 'package:school_app/model/person.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpWidget extends StatefulWidget {
   const SignUpWidget({super.key});
@@ -8,21 +11,12 @@ class SignUpWidget extends StatefulWidget {
 }
 
 class _SignUpWidgetState extends State<SignUpWidget> {
+  final RegisterDbHelper _registerDbHelper = RegisterDbHelper();
+  final sharedPreferences = SharedPreferences.getInstance();
+
   final TextEditingController _controllerName = TextEditingController();
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
-
-  final snackBar = const SnackBar(
-    content: Text(
-      "Please fill in empty areas.",
-      style: TextStyle(
-        color: Colors.white,
-      ),
-      textAlign: TextAlign.center,
-    ),
-    backgroundColor: Colors.red,
-    behavior: SnackBarBehavior.floating,
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +50,12 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 8),
+                padding: EdgeInsets.fromLTRB(
+                  MediaQuery.of(context).size.width * .075,
+                  8,
+                  MediaQuery.of(context).size.width * .075,
+                  0,
+                ),
                 child: TextField(
                   controller: _controllerName,
                   textInputAction: TextInputAction.next,
@@ -66,7 +65,12 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 8),
+                padding: EdgeInsets.fromLTRB(
+                  MediaQuery.of(context).size.width * .075,
+                  8,
+                  MediaQuery.of(context).size.width * .075,
+                  0,
+                ),
                 child: TextField(
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
@@ -77,7 +81,12 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 8),
+                padding: EdgeInsets.fromLTRB(
+                  MediaQuery.of(context).size.width * .075,
+                  8,
+                  MediaQuery.of(context).size.width * .075,
+                  0,
+                ),
                 child: TextField(
                   controller: _controllerPassword,
                   onSubmitted: (String text) => _clickHandler(),
@@ -89,7 +98,12 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 8),
+                padding: EdgeInsets.fromLTRB(
+                  MediaQuery.of(context).size.width * .075,
+                  8,
+                  MediaQuery.of(context).size.width * .075,
+                  0,
+                ),
                 child: SizedBox(
                   width: double.infinity,
                   height: 50,
@@ -107,13 +121,34 @@ class _SignUpWidgetState extends State<SignUpWidget> {
     );
   }
 
-  void _clickHandler() {
+  void _clickHandler() async {
     String userName = _controllerName.text.trim();
     String userEmail = _controllerEmail.text.trim();
     String userPassword = _controllerPassword.text.trim();
 
     if (userName.isEmpty || userEmail.isEmpty || userPassword.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    } else {}
+      ScaffoldMessenger.of(context)
+          .showSnackBar(snackBar("Please fill in empty areas."));
+    } else if (userPassword.length < 8) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(snackBar("Password must be at least 8 characters."));
+    } else {
+      Person person = Person(userName, userEmail, userPassword);
+      int userId = await _registerDbHelper.insert(person);
+    }
+  }
+
+  SnackBar snackBar(waring) {
+    return SnackBar(
+      content: Text(
+        waring,
+        style: const TextStyle(
+          color: Colors.white,
+        ),
+        textAlign: TextAlign.center,
+      ),
+      backgroundColor: Colors.red,
+      behavior: SnackBarBehavior.floating,
+    );
   }
 }

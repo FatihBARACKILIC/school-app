@@ -62,9 +62,7 @@ class _UserMainWidgetState extends State<UserMainWidget> {
         automaticallyImplyLeading: false,
         title: Text(
           "Welcome, ${userData[1]}",
-          textScaleFactor: 1.5,
         ),
-        toolbarHeight: MediaQuery.of(context).size.height * .05,
         actions: [
           IconButton(
               onPressed: () {

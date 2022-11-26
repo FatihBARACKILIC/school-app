@@ -1,9 +1,13 @@
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
+import 'package:school_app/colors/colors.dart';
 import 'package:school_app/db/register_db_helper.dart';
 import 'package:school_app/helper/shared_preferences.dart';
 import 'package:school_app/main.dart';
 import 'package:school_app/screens/sign_up/sign_up_screen.dart';
+import 'package:school_app/screens/user_main/screens/home.dart';
+import 'package:school_app/screens/user_main/screens/add_lesson.dart';
+import 'package:school_app/screens/user_main/screens/user.dart';
 
 class UserMainWidget extends StatefulWidget {
   const UserMainWidget({super.key});
@@ -13,13 +17,21 @@ class UserMainWidget extends StatefulWidget {
 }
 
 class _UserMainWidgetState extends State<UserMainWidget> {
-  late List userData = List.filled(4, "null");
+  List userData = List.filled(4, "null");
+  final List _widgets = <Widget>[];
+  int _selectedIndex = 1;
 
   @override
   void initState() {
     super.initState();
     idCheck();
     getUserData();
+
+    // setState(() {
+    //   _widgets.add(home());
+    //   _widgets.add(search());
+    //   _widgets.add(user());
+    // });
   }
 
   getUserData() async {
@@ -55,8 +67,20 @@ class _UserMainWidgetState extends State<UserMainWidget> {
     });
   }
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      _widgets.add(home());
+      _widgets.add(const AddLesson());
+      _widgets.add(user());
+    });
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -88,9 +112,33 @@ class _UserMainWidgetState extends State<UserMainWidget> {
           backgroundColor: Colors.red,
           behavior: SnackBarBehavior.floating,
         ),
-        child: Text(
-            "${userData[0]},${userData[1]},${userData[2]},${userData[3]}",
-            textScaleFactor: 3),
+        child: _widgets[_selectedIndex],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Home",
+            backgroundColor: Colors.deepPurple,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_circle_outline_sharp),
+            backgroundColor: Colors.deepPurple,
+            label: "Add Lesson",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            backgroundColor: Colors.deepPurple,
+            label: "User",
+          ),
+        ],
+        backgroundColor: Colors.deepPurple,
+        unselectedItemColor: darkColor,
+        selectedItemColor: Colors.white,
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        iconSize: 50,
+        type: BottomNavigationBarType.fixed,
       ),
     );
   }

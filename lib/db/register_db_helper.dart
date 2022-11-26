@@ -80,6 +80,40 @@ class RegisterDbHelper {
     return user;
   }
 
+  Future getAllUserData() async {
+    Database? db = await database;
+
+    List userData = await db!.query(
+      personTable,
+      columns: [
+        columnId,
+        columnUserName,
+        columnEMail,
+        columnPassword,
+      ],
+    );
+    List user = [];
+
+    if (userData.isNotEmpty) {
+      for (var element in userData) {
+        user.add([
+          element["id"]!,
+          element["userName"]!,
+          element["email"]!,
+          element["password"]!,
+        ]);
+      }
+    }
+    // List user = [
+    //   userData[0]["id"]!,
+    //   userData[0]["userName"]!,
+    //   userData[0]["email"]!,
+    //   userData[0]["password"]!,
+    // ];
+
+    return user;
+  }
+
   Future<int> insert(Person person) async {
     Database? db = await database;
 

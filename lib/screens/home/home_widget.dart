@@ -29,8 +29,6 @@ class _HomeWidgetState extends State<HomeWidget> {
   idCheck() async {
     var id = await getId();
 
-    print(id);
-
     if (id != 0) {
       userMainRoute();
     }
@@ -38,7 +36,7 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   userMainRoute() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => const UserMainScreen(),
@@ -52,6 +50,7 @@ class _HomeWidgetState extends State<HomeWidget> {
       await FlutterStatusbarcolor.setStatusBarColor(darkColor);
       FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
     } catch (e) {
+      // ignore: avoid_print
       print(e);
     }
   }

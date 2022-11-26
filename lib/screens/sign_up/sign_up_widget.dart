@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:school_app/db/register_db_helper.dart';
+import 'package:school_app/helper/shared_preferences.dart';
 import 'package:school_app/model/person.dart';
 import 'package:school_app/screens/login/login_screen.dart';
 import 'package:school_app/screens/user_main/user_main_screen.dart';
@@ -149,29 +150,29 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   ),
                 ),
               ),
-              // Padding(
-              //   padding: EdgeInsets.fromLTRB(
-              //     MediaQuery.of(context).size.width * .075,
-              //     8,
-              //     MediaQuery.of(context).size.width * .075,
-              //     0,
-              //   ),
-              //   child: SizedBox(
-              //     width: double.infinity,
-              //     height: 50,
-              //     child: ElevatedButton(
-              //       onPressed: () {
-              //         RegisterDbHelper registerDbHelper = RegisterDbHelper();
-              //         print(registerDbHelper.deleteAllDB());
-              //       },
-              //       style: ButtonStyle(
-              //         backgroundColor:
-              //             MaterialStatePropertyAll(Colors.red.shade800),
-              //       ),
-              //       child: const Text("Clear"),
-              //     ),
-              //   ),
-              // ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                  MediaQuery.of(context).size.width * .075,
+                  8,
+                  MediaQuery.of(context).size.width * .075,
+                  0,
+                ),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      RegisterDbHelper registerDbHelper = RegisterDbHelper();
+                      registerDbHelper.deleteAllDB();
+                    },
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStatePropertyAll(Colors.red.shade800),
+                    ),
+                    child: const Text("Clear"),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -199,14 +200,14 @@ class _SignUpWidgetState extends State<SignUpWidget> {
       } else {
         ScaffoldMessenger.of(context)
             .showSnackBar(snackBar(waring: "Ok :d", color: Colors.green));
-        // SharedPreferencesHelper.saveUserData("id", userId);
-        // nextPage();
+        SharedPreferencesHelper.saveUserData("id", userId);
+        nextPage();
       }
     }
   }
 
   nextPage() {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => const UserMainScreen(),

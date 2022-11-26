@@ -157,7 +157,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   }
 
   nextPage() {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => const UserMainScreen(),

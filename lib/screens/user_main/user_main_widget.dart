@@ -1,3 +1,4 @@
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 import 'package:school_app/db/register_db_helper.dart';
 import 'package:school_app/helper/shared_preferences.dart';
@@ -13,6 +14,7 @@ class UserMainWidget extends StatefulWidget {
 
 class _UserMainWidgetState extends State<UserMainWidget> {
   late List userData = List.filled(4, "null");
+
   @override
   void initState() {
     super.initState();
@@ -24,10 +26,10 @@ class _UserMainWidgetState extends State<UserMainWidget> {
     RegisterDbHelper register = RegisterDbHelper();
     List lUserData = await register.getUserData(await getId());
     setState(() {
-      userData[0] = lUserData[0] ?? "null";
-      userData[1] = lUserData[1] ?? "null";
-      userData[2] = lUserData[2] ?? "null";
-      userData[3] = lUserData[3] ?? "null";
+      userData[0] = lUserData[0] ?? "id";
+      userData[1] = lUserData[1] ?? "User Name";
+      userData[2] = lUserData[2] ?? "E-Mail";
+      userData[3] = lUserData[3] ?? "Password";
     });
   }
 
@@ -57,7 +59,12 @@ class _UserMainWidgetState extends State<UserMainWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("UserName"),
+        automaticallyImplyLeading: false,
+        title: Text(
+          "Welcome, ${userData[1]}",
+          textScaleFactor: 1.5,
+        ),
+        toolbarHeight: MediaQuery.of(context).size.height * .05,
         actions: [
           IconButton(
               onPressed: () {
@@ -72,8 +79,21 @@ class _UserMainWidgetState extends State<UserMainWidget> {
               icon: const Icon(Icons.logout))
         ],
       ),
-      body: Text("${userData[0]},${userData[1]},${userData[2]},${userData[3]}",
-          textScaleFactor: 3),
+      body: DoubleBackToCloseApp(
+        snackBar: const SnackBar(
+          content: Text(
+            "Tap back again to leave!",
+            style: TextStyle(color: Colors.white),
+            textAlign: TextAlign.center,
+            textScaleFactor: 1.5,
+          ),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+        ),
+        child: Text(
+            "${userData[0]},${userData[1]},${userData[2]},${userData[3]}",
+            textScaleFactor: 3),
+      ),
     );
   }
 }

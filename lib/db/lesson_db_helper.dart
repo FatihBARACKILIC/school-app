@@ -100,4 +100,33 @@ class LessonDbHelper {
 
     return lesson;
   }
+
+  Future getMyLessons(int id) async {
+    Database? db = await database;
+
+    List lessonData = await db!.query(
+      lessonTable,
+      columns: [
+        columnId,
+        columnLessonName,
+        columnLessonCredit,
+      ],
+      where: "$columnUserId=?",
+      whereArgs: [id],
+    );
+
+    List lesson = [];
+
+    if (lessonData.isNotEmpty) {
+      for (var e in lessonData) {
+        lesson.add([
+          e[columnId],
+          e[columnLessonName],
+          e[columnLessonCredit],
+        ]);
+      }
+    }
+
+    return lesson;
+  }
 }

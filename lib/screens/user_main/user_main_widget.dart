@@ -28,7 +28,7 @@ class _UserMainWidgetState extends State<UserMainWidget> {
     getUserData();
 
     setState(() {
-      _widgets.add(home());
+      _widgets.add(const HomeWidget());
       _widgets.add(const AddLesson());
       _widgets.add(const UserUpdate());
     });

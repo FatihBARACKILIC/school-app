@@ -35,11 +35,9 @@ class _HomeWidgetState extends State<HomeWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
+        const SizedBox(
           width: double.infinity,
-          color: darkColor,
-          padding: const EdgeInsets.only(top: 8),
-          child: const Text(
+          child: Text(
             "Your Lessons",
             textAlign: TextAlign.center,
             textScaleFactor: 5,
@@ -47,35 +45,30 @@ class _HomeWidgetState extends State<HomeWidget> {
         ),
         Expanded(
           child: _lesson.isNotEmpty
-              ? Container(
-                  color: whiteColor100,
-                  child: Expanded(
-                    child: ListView.builder(
-                      itemBuilder: (context, index) {
-                        return Container(
-                          alignment: Alignment.topCenter,
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                width: 1,
-                                color: darkColor,
-                              ),
-                            ),
+              ? ListView.builder(
+                  itemBuilder: (context, index) {
+                    return Container(
+                      alignment: Alignment.topCenter,
+                      decoration: BoxDecoration(
+                        color: whiteColor100,
+                        border: Border(
+                          bottom: BorderSide(
+                            width: 1,
+                            color: darkColor,
                           ),
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width * .75,
-                            child: ListTile(
-                              leading: const Icon(Icons.book),
-                              title: Text(_lesson[index][1]),
-                              subtitle:
-                                  Text("Lesson Credit: ${_lesson[index][2]}"),
-                            ),
-                          ),
-                        );
-                      },
-                      itemCount: _lesson.length,
-                    ),
-                  ),
+                        ),
+                      ),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * .75,
+                        child: ListTile(
+                          leading: const Icon(Icons.book),
+                          title: Text(_lesson[index][1]),
+                          subtitle: Text("Lesson Credit: ${_lesson[index][2]}"),
+                        ),
+                      ),
+                    );
+                  },
+                  itemCount: _lesson.length,
                 )
               : const Text("Empty Data"),
         ),

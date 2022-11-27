@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:school_app/db/register_db_helper.dart';
 import 'package:school_app/helper/shared_preferences.dart';
-import 'package:school_app/model/person.dart';
 
 class UserUpdate extends StatefulWidget {
   const UserUpdate({super.key});
@@ -98,18 +97,20 @@ class _UserUpdateState extends State<UserUpdate> {
       int result =
           await _registerDbHelper.update(_id, userName, eMail, password);
       if (result > 0) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(_snackBar(content: "OK :d", color: Colors.green));
+        runSnackbar(content: "Ok :d", color: Colors.green);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(_snackBar(
-          content: "Error!",
-        ));
+        runSnackbar(content: "Error.");
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(_snackBar(
         content: "Fill All area!",
       ));
     }
+  }
+
+  void runSnackbar({required String content, Color color = Colors.red}) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(_snackBar(content: content, color: color));
   }
 
   SnackBar _snackBar({var content, Color color = Colors.red}) {

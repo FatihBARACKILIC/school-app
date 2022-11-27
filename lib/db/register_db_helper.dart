@@ -104,12 +104,6 @@ class RegisterDbHelper {
         ]);
       }
     }
-    // List user = [
-    //   userData[0]["id"]!,
-    //   userData[0]["userName"]!,
-    //   userData[0]["email"]!,
-    //   userData[0]["password"]!,
-    // ];
 
     return user;
   }
@@ -137,15 +131,21 @@ class RegisterDbHelper {
     return user.isEmpty ? false : true;
   }
 
-  Future<int> update(Person person) async {
+  Future<int> update(
+    int id,
+    String uName,
+    String uMail,
+    String password,
+  ) async {
     Database? db = await database;
 
-    int result = await db!.update(
-      personTable,
-      person.toMap(),
-      where: columnId,
-      whereArgs: [person.id],
-    );
+    int result = await db!.rawUpdate("""
+      UPDATE $personTable SET
+      $columnUserName=?,
+      $columnEMail=?,
+      $columnPassword=?
+      WHERE $columnId=?
+    """, [uName, uMail, password, id]);
 
     return result;
   }

@@ -19,7 +19,7 @@ class UserMainWidget extends StatefulWidget {
 class _UserMainWidgetState extends State<UserMainWidget> {
   List userData = List.filled(4, "null");
   final List _widgets = <Widget>[];
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -27,11 +27,11 @@ class _UserMainWidgetState extends State<UserMainWidget> {
     idCheck();
     getUserData();
 
-    // setState(() {
-    //   _widgets.add(home());
-    //   _widgets.add(search());
-    //   _widgets.add(user());
-    // });
+    setState(() {
+      _widgets.add(home());
+      _widgets.add(const AddLesson());
+      _widgets.add(const UserUpdate());
+    });
   }
 
   getUserData() async {
@@ -75,12 +75,6 @@ class _UserMainWidgetState extends State<UserMainWidget> {
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      _widgets.add(home());
-      _widgets.add(const AddLesson());
-      _widgets.add(user());
-    });
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
